@@ -8,6 +8,7 @@ branchStatus () {
   DETACHEDCHAR="━"
   PROBLEMCHAR="𝌐"
   REBASECHAR="?"
+  BISECTCHAR="⇲"
 
   EDITEDFILESCOLOR="\001\e[32m\002"
   DETACHEDCOLOR="\001\e[91m\002"
@@ -25,6 +26,14 @@ branchStatus () {
   if [[ -n `git branch -v | grep "no branch, rebasing"` ]]
   then
     OUTPUT+=$REBASECHAR
+    echo -e $OUTPUT
+    return
+  fi
+
+  #Bisect in progress
+  if [[ -n `git branch -v | grep "no branch, bisect"` ]]
+  then
+    OUTPUT+=$BISECTCHAR
     echo -e $OUTPUT
     return
   fi
