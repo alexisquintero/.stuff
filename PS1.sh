@@ -20,7 +20,7 @@ branchStatus () {
 
   OUTPUT=""
   #Check if it's a new repository
-  if [[ -z `git branch` ]]
+  if [[ -z $(git branch) ]]
   then
     OUTPUT+=$MAINCHAR
     echo -e $OUTPUT
@@ -28,15 +28,15 @@ branchStatus () {
   fi
 
   #Rebase in progress
-  if [[ -n `git branch -v | grep "no branch, rebasing"` ]]
+  if [[ -n $(git branch -v | grep "no branch, rebasing") ]]
   then
     OUTPUT+=$REBASECHAR
-    echo -e $OUTPUT
+    echo -e "$OUTPUT"
     return
   fi
 
   #Bisect in progress
-  if [[ -n `git branch -v | grep "no branch, bisect"` ]]
+  if [[ -n $(git branch -v | grep "no branch, bisect") ]]
   then
     OUTPUT+=$BISECTCHAR
     echo -e $OUTPUT
@@ -44,10 +44,10 @@ branchStatus () {
   fi
 
   #Check if detached
-  if [[ -n `git branch -v | grep "HEAD detached "` ]]
+  if [[ -n $(git branch -v | grep "HEAD detached ") ]]
   then
     OUTPUT+=$DETACHEDCOLOR$DETACHEDCHAR
-    echo -e $OUTPUT
+    echo -e "$OUTPUT"
     return
   fi
 
@@ -67,11 +67,11 @@ branchStatus () {
   MAINBRANCH="master"
   DEVELOP="develop"
   #Check if develop exists
-  if [[ -n `git branch | egrep "^[*]{0,1}[[:space:]]+${DEVELOP}$"` ]]
+  if [[ -n $(git branch | grep -E "^[*]{0,1}[[:space:]]+${DEVELOP}$") ]]
   then
     MAINBRANCH=$DEVELOP
   #Check if master exists
-  elif [[ -z `git branch | egrep "^[*]{0,1}[[:space:]]+${MAINBRANCH}$"` ]]
+  elif [[ -z $(git branch | grep -E "^[*]{0,1}[[:space:]]+${MAINBRANCH}$") ]]
   then
     MAINBRANCH=""
   fi
@@ -83,20 +83,20 @@ branchStatus () {
     CURRENTUPSTREAM="$REMOTE/$CURRENT"
   fi
   #Check if current branch exists upstream
-  if ! [ `git branch -r | egrep "^[[:space:]]+${CURRENTUPSTREAM}$"` ]
+  if ! [ $(git branch -r | grep -E "^[[:space:]]+${CURRENTUPSTREAM}$") ]
   then
     CURRENTUPSTREAM=$CURRENT
   fi
 
   UPSTREAMMAIN="$REMOTE/$MAINBRANCH"
   #Check if main branch exists upstream
-  if ! [ `git branch -r | egrep "^[[:space:]]+${UPSTREAMMAIN}$"` ]
+  if ! [ $(git branch -r | grep -E "^[[:space:]]+${UPSTREAMMAIN}$") ]
   then
     UPSTREAMMAIN=$MAINBRANCH
   fi
 
-  RPCURRENT=$(git rev-parse $CURRENT)
-  RPCURRENTUPSTREAM=$(git rev-parse $CURRENTUPSTREAM)
+  RPCURRENT=$(git rev-parse "$CURRENT")
+  RPCURRENTUPSTREAM=$(git rev-parse "$CURRENTUPSTREAM")
 
   #Check if there are edited files
   STAGEDCHANGES=false
@@ -125,19 +125,19 @@ branchStatus () {
   fi
 
   #Check if current is up to date
-  if [ $RPCURRENT = $RPCURRENTUPSTREAM ]
+  if [ "$RPCURRENT" = "$RPCURRENTUPSTREAM" ]
   then
     OUTPUT+=$CURRENTCHAR
   else
     #Check if current is ahead
-    if [ `git log --format='%H' ${CURRENTUPSTREAM} | egrep "^${RPCURRENT}$"` ]
+    if [ $(git log --format='%H' "${CURRENTUPSTREAM}" | grep -E "^${RPCURRENT}$") ]
     then
       #NOT ahead
       OUTPUT+=$CURRENTBEHINDCHAR
     else
       #Ahead
       #Check if current is behind
-      if [ `git log --format='%H' | egrep "^${RPCURRENTUPSTREAM}$"` ]
+      if [ $(git log --format='%H' | grep -E "^${RPCURRENTUPSTREAM}$") ]
       then
         #NOT behind
         OUTPUT+=$CURRENTAHEADCHAR
@@ -148,7 +148,7 @@ branchStatus () {
     fi
   fi
   #Check current != main
-  if  [[ -z $MAINBRANCH ]] || [ $CURRENT = $MAINBRANCH ]
+  if  [[ -z $MAINBRANCH ]] || [ "$CURRENT" = $MAINBRANCH ]
   then
     echo -e $OUTPUT
     return
@@ -158,7 +158,7 @@ branchStatus () {
   RPUPSTREAMMAIN=$(git rev-parse $UPSTREAMMAIN)
 
   #Check if main is up to date
-  if [[ -n `git log --format='%H' | grep ${RPUPSTREAMMAIN}` ]]
+  if [[ -n $(git log --format='%H' | grep "${RPUPSTREAMMAIN}") ]]
   then
     OUTPUT+=$MAINCHAR
   else
@@ -170,18 +170,9 @@ branchStatus () {
 insideGit () {
   if git rev-parse --git-dir > /dev/null 2>&1; then
     #echo "inside git repo"
-    echo $(branchStatus)
+    echo "$(branchStatus)"
     git fetch > /dev/null 2>&1 &
   else
     echo '⬥'
   fi
 }
-
-KHAKI="\001\e[38;2;195;163;138m\002"
-
-LYELLOW="\[\e[93m\]"
-
-BOLD="\[\e[1m\]"
-NORMAL="\[\e[21m\]"
-
-RESET="\[\e[0m\]"
