@@ -28,26 +28,26 @@ branchStatus () {
   fi
 
   #Rebase in progress
-  if [ -n "$(git branch -v | grep "no branch, rebasing")" ]
+  if git branch -v | grep -q "no branch, rebasing"
   then
     OUTPUT=$OUTPUT$REBASECHAR
-    printf "$OUTPUT"
+    printf "%s" "$OUTPUT"
     return
   fi
 
   #Bisect in progress
-  if [ -n "$(git branch -v | grep "no branch, bisect")" ]
+  if git branch -v | grep -q "no branch, bisect"
   then
     OUTPUT=$OUTPUT$BISECTCHAR
-    printf "$OUTPUT"
+    printf "%s" "$OUTPUT"
     return
   fi
 
   #Check if detached
-  if [ -n "$(git branch -v | grep "HEAD detached ")" ]
+  if git branch -v | grep -q "HEAD detached "
   then
     OUTPUT=$OUTPUT$DETACHEDCOLOR$DETACHEDCHAR
-    printf "$OUTPUT"
+    printf "%s" "$OUTPUT"
     return
   fi
 
@@ -67,7 +67,7 @@ branchStatus () {
   MAINBRANCH="master"
   DEVELOP="develop"
   #Check if develop exists
-  if [ -n "$(git branch | grep -E "^[*]{0,1}[[:space:]]+${DEVELOP}$")" ]
+  if git branch | grep -q -E "^[*]{0,1}[[:space:]]+${DEVELOP}$"
   then
     MAINBRANCH=$DEVELOP
   #Check if master exists
@@ -130,14 +130,14 @@ branchStatus () {
     OUTPUT=$OUTPUT$CURRENTCHAR
   else
     #Check if current is ahead
-    if [ "$(git log --format='%H' "${CURRENTUPSTREAM}" | grep -E "^${RPCURRENT}$")" ]
+    if git log --format='%H' "${CURRENTUPSTREAM}" | grep -q -E "^${RPCURRENT}$"
     then
       #NOT ahead
       OUTPUT=$OUTPUT$CURRENTBEHINDCHAR
     else
       #Ahead
       #Check if current is behind
-      if [ "$(git log --format='%H' | grep -E "^${RPCURRENTUPSTREAM}$")" ]
+      if git log --format='%H' | grep -q -E "^${RPCURRENTUPSTREAM}$"
       then
         #NOT behind
         OUTPUT=$OUTPUT$CURRENTAHEADCHAR
@@ -150,7 +150,7 @@ branchStatus () {
   #Check current != main
   if  [ -z $MAINBRANCH ] || [ "$CURRENT" = $MAINBRANCH ]
   then
-    printf "$OUTPUT"
+    printf "%s" "$OUTPUT"
     return
   fi
 
@@ -158,13 +158,13 @@ branchStatus () {
   RPUPSTREAMMAIN=$(git rev-parse $UPSTREAMMAIN)
 
   #Check if main is up to date
-  if [ -n "$(git log --format='%H' | grep "${RPUPSTREAMMAIN}")" ]
+  if git log --format='%H' | grep -q "${RPUPSTREAMMAIN}"
   then
     OUTPUT=$OUTPUT$MAINCHAR
   else
     OUTPUT=$OUTPUT$MAINBEHINDCHAR
   fi
-  printf "$OUTPUT"
+  printf "%s" "$OUTPUT"
 }
 
 insideGit () {
