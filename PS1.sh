@@ -1,3 +1,5 @@
+#!/bin/bash
+
 branchStatus () {
   MAINCHAR="❙"
   MAINBEHINDCHAR="❰"
@@ -10,8 +12,11 @@ branchStatus () {
   REBASECHAR="?"
   BISECTCHAR="⇲"
 
-  EDITEDFILESCOLOR="\001\e[32m\002"
   DETACHEDCOLOR="\001\e[91m\002"
+
+  EVERYTHINGUNSTAGEDCOLOR="\001\e[91m\002"
+  MIXEDSTAGEDUNSTAGEDCOLOR="\001\e[93m\002"
+  EVEYTHINGSTAGEDCOLOR="\001\e[92m\002"
 
   OUTPUT=""
   #Check if it's a new repository
@@ -94,10 +99,31 @@ branchStatus () {
   RPCURRENTUPSTREAM=$(git rev-parse $CURRENTUPSTREAM)
 
   #Check if there are edited files
-  if [[ ! -z $(git status -s) ]]
+  STAGEDCHANGES=false
+  UNSTAGEDCHANGES=false
+  if [ -n "$(git diff)" ]
   then
-    OUTPUT+=$EDITEDFILESCOLOR
+    UNSTAGEDCHANGES=true
   fi
+  if [ -n "$(git diff --staged)" ]
+  then
+    STAGEDCHANGES=true
+  fi
+  if [ "$STAGEDCHANGES" == "true" ]
+  then
+    if [ "$UNSTAGEDCHANGES" == "true" ]
+    then
+      OUTPUT+=$MIXEDSTAGEDUNSTAGEDCOLOR
+    else
+      OUTPUT+=$EVEYTHINGSTAGEDCOLOR
+    fi
+  else
+    if [ "$UNSTAGEDCHANGES" == "true" ]
+    then
+      OUTPUT+=$EVERYTHINGUNSTAGEDCOLOR
+    fi
+  fi
+
   #Check if current is up to date
   if [ $RPCURRENT = $RPCURRENTUPSTREAM ]
   then
