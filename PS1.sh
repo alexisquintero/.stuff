@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 branchStatus () {
   MAINCHAR="❙"
@@ -19,37 +19,33 @@ branchStatus () {
   EVEYTHINGSTAGEDCOLOR="\001\e[92m\002"
 
   OUTPUT=""
-  #Check if it's a new repository
-  if [ -z "$(git branch)" ]
-  then
-    OUTPUT=$OUTPUT$MAINCHAR
-    printf "$OUTPUT"
-    return
-  fi
 
-  #Rebase in progress
-  if git branch -v | grep -q "no branch, rebasing"
-  then
-    OUTPUT=$OUTPUT$REBASECHAR
-    printf "$OUTPUT"
-    return
-  fi
-
-  #Bisect in progress
-  if git branch -v | grep -q "no branch, bisect"
-  then
-    OUTPUT=$OUTPUT$BISECTCHAR
-    printf "$OUTPUT"
-    return
-  fi
-
-  #Check if detached
-  if git branch -v | grep -q "HEAD detached "
-  then
-    OUTPUT=$OUTPUT$DETACHEDCOLOR$DETACHEDCHAR
-    printf "$OUTPUT"
-    return
-  fi
+  case $(git branch -v) in
+    "")
+      #Check if it's a new repository
+      OUTPUT=$OUTPUT$MAINCHAR
+      printf "$OUTPUT"
+      return
+      ;;
+    *"no branch, rebasing"*)
+      #Rebase in progress
+      OUTPUT=$OUTPUT$REBASECHAR
+      printf "$OUTPUT"
+      return
+      ;;
+    *"no branch, bisect"*)
+      #Bisect in progress
+      OUTPUT=$OUTPUT$BISECTCHAR
+      printf "$OUTPUT"
+      return
+      ;;
+    *"HEAD detached "*)
+      #Check if detached
+      OUTPUT=$OUTPUT$DETACHEDCOLOR$DETACHEDCHAR
+      printf "$OUTPUT"
+      return
+      ;;
+  esac
 
   REMOTES=$(git remote)
   FLAG=true
