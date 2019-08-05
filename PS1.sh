@@ -83,14 +83,14 @@ branchStatus () {
     CURRENTUPSTREAM="$REMOTE/$CURRENT"
   fi
   #Check if current branch exists upstream
-  if ! [ $(git branch -r | grep -E "^[[:space:]]+${CURRENTUPSTREAM}$") ]
+  if ! [ "$(git branch -r | grep -E "^[[:space:]]+${CURRENTUPSTREAM}$")" ]
   then
     CURRENTUPSTREAM=$CURRENT
   fi
 
   UPSTREAMMAIN="$REMOTE/$MAINBRANCH"
   #Check if main branch exists upstream
-  if ! [ $(git branch -r | grep -E "^[[:space:]]+${UPSTREAMMAIN}$") ]
+  if ! [ "$(git branch -r | grep -E "^[[:space:]]+${UPSTREAMMAIN}$")" ]
   then
     UPSTREAMMAIN=$MAINBRANCH
   fi
@@ -130,14 +130,14 @@ branchStatus () {
     OUTPUT+=$CURRENTCHAR
   else
     #Check if current is ahead
-    if [ $(git log --format='%H' "${CURRENTUPSTREAM}" | grep -E "^${RPCURRENT}$") ]
+    if [ "$(git log --format='%H' "${CURRENTUPSTREAM}" | grep -E "^${RPCURRENT}$")" ]
     then
       #NOT ahead
       OUTPUT+=$CURRENTBEHINDCHAR
     else
       #Ahead
       #Check if current is behind
-      if [ $(git log --format='%H' | grep -E "^${RPCURRENTUPSTREAM}$") ]
+      if [ "$(git log --format='%H' | grep -E "^${RPCURRENTUPSTREAM}$")" ]
       then
         #NOT behind
         OUTPUT+=$CURRENTAHEADCHAR
