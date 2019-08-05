@@ -22,7 +22,7 @@ branchStatus () {
   #Check if it's a new repository
   if [ -z "$(git branch)" ]
   then
-    OUTPUT+=$MAINCHAR
+    OUTPUT=$OUTPUT$MAINCHAR
     echo -e $OUTPUT
     return
   fi
@@ -30,7 +30,7 @@ branchStatus () {
   #Rebase in progress
   if [ -n "$(git branch -v | grep "no branch, rebasing")" ]
   then
-    OUTPUT+=$REBASECHAR
+    OUTPUT=$OUTPUT$REBASECHAR
     echo -e "$OUTPUT"
     return
   fi
@@ -38,15 +38,15 @@ branchStatus () {
   #Bisect in progress
   if [ -n "$(git branch -v | grep "no branch, bisect")" ]
   then
-    OUTPUT+=$BISECTCHAR
-    echo -e $OUTPUT
+    OUTPUT=$OUTPUT$BISECTCHAR
+    echo -e "$OUTPUT"
     return
   fi
 
   #Check if detached
   if [ -n "$(git branch -v | grep "HEAD detached ")" ]
   then
-    OUTPUT+=$DETACHEDCOLOR$DETACHEDCHAR
+    OUTPUT=$OUTPUT$DETACHEDCOLOR$DETACHEDCHAR
     echo -e "$OUTPUT"
     return
   fi
@@ -113,44 +113,44 @@ branchStatus () {
   then
     if [ "$UNSTAGEDCHANGES" = "true" ]
     then
-      OUTPUT+=$MIXEDSTAGEDUNSTAGEDCOLOR
+      OUTPUT=$OUTPUT$MIXEDSTAGEDUNSTAGEDCOLOR
     else
-      OUTPUT+=$EVEYTHINGSTAGEDCOLOR
+      OUTPUT=$OUTPUT$EVEYTHINGSTAGEDCOLOR
     fi
   else
     if [ "$UNSTAGEDCHANGES" = "true" ]
     then
-      OUTPUT+=$EVERYTHINGUNSTAGEDCOLOR
+      OUTPUT=$OUTPUT$EVERYTHINGUNSTAGEDCOLOR
     fi
   fi
 
   #Check if current is up to date
   if [ "$RPCURRENT" = "$RPCURRENTUPSTREAM" ]
   then
-    OUTPUT+=$CURRENTCHAR
+    OUTPUT=$OUTPUT$CURRENTCHAR
   else
     #Check if current is ahead
     if [ "$(git log --format='%H' "${CURRENTUPSTREAM}" | grep -E "^${RPCURRENT}$")" ]
     then
       #NOT ahead
-      OUTPUT+=$CURRENTBEHINDCHAR
+      OUTPUT=$OUTPUT$CURRENTBEHINDCHAR
     else
       #Ahead
       #Check if current is behind
       if [ "$(git log --format='%H' | grep -E "^${RPCURRENTUPSTREAM}$")" ]
       then
         #NOT behind
-        OUTPUT+=$CURRENTAHEADCHAR
+        OUTPUT=$OUTPUT$CURRENTAHEADCHAR
       else
         #Behind
-        OUTPUT+=$PROBLEMCHAR
+        OUTPUT=$OUTPUT$PROBLEMCHAR
       fi
     fi
   fi
   #Check current != main
   if  [ -z $MAINBRANCH ] || [ "$CURRENT" = $MAINBRANCH ]
   then
-    echo -e $OUTPUT
+    echo -e "$OUTPUT"
     return
   fi
 
@@ -160,11 +160,11 @@ branchStatus () {
   #Check if main is up to date
   if [ -n "$(git log --format='%H' | grep "${RPUPSTREAMMAIN}")" ]
   then
-    OUTPUT+=$MAINCHAR
+    OUTPUT=$OUTPUT$MAINCHAR
   else
-    OUTPUT+=$MAINBEHINDCHAR
+    OUTPUT=$OUTPUT$MAINBEHINDCHAR
   fi
-  echo -e $OUTPUT
+  echo -e "$OUTPUT"
 }
 
 insideGit () {
