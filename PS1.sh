@@ -23,7 +23,7 @@ branchStatus () {
   if [ -z "$(git branch)" ]
   then
     OUTPUT=$OUTPUT$MAINCHAR
-    echo -e $OUTPUT
+    print $OUTPUT
     return
   fi
 
@@ -31,7 +31,7 @@ branchStatus () {
   if [ -n "$(git branch -v | grep "no branch, rebasing")" ]
   then
     OUTPUT=$OUTPUT$REBASECHAR
-    echo -e "$OUTPUT"
+    printf "$OUTPUT"
     return
   fi
 
@@ -39,7 +39,7 @@ branchStatus () {
   if [ -n "$(git branch -v | grep "no branch, bisect")" ]
   then
     OUTPUT=$OUTPUT$BISECTCHAR
-    echo -e "$OUTPUT"
+    printf "$OUTPUT"
     return
   fi
 
@@ -47,7 +47,7 @@ branchStatus () {
   if [ -n "$(git branch -v | grep "HEAD detached ")" ]
   then
     OUTPUT=$OUTPUT$DETACHEDCOLOR$DETACHEDCHAR
-    echo -e "$OUTPUT"
+    printf "$OUTPUT"
     return
   fi
 
@@ -150,7 +150,7 @@ branchStatus () {
   #Check current != main
   if  [ -z $MAINBRANCH ] || [ "$CURRENT" = $MAINBRANCH ]
   then
-    echo -e "$OUTPUT"
+    printf "$OUTPUT"
     return
   fi
 
@@ -164,7 +164,7 @@ branchStatus () {
   else
     OUTPUT=$OUTPUT$MAINBEHINDCHAR
   fi
-  echo -e "$OUTPUT"
+  printf "$OUTPUT"
 }
 
 insideGit () {
