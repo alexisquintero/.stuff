@@ -20,7 +20,7 @@ branchStatus () {
 
   OUTPUT=""
   #Check if it's a new repository
-  if [[ -z $(git branch) ]]
+  if [ -z "$(git branch)" ]
   then
     OUTPUT+=$MAINCHAR
     echo -e $OUTPUT
@@ -28,7 +28,7 @@ branchStatus () {
   fi
 
   #Rebase in progress
-  if [[ -n $(git branch -v | grep "no branch, rebasing") ]]
+  if [ -n "$(git branch -v | grep "no branch, rebasing")" ]
   then
     OUTPUT+=$REBASECHAR
     echo -e "$OUTPUT"
@@ -36,7 +36,7 @@ branchStatus () {
   fi
 
   #Bisect in progress
-  if [[ -n $(git branch -v | grep "no branch, bisect") ]]
+  if [ -n "$(git branch -v | grep "no branch, bisect")" ]
   then
     OUTPUT+=$BISECTCHAR
     echo -e $OUTPUT
@@ -44,7 +44,7 @@ branchStatus () {
   fi
 
   #Check if detached
-  if [[ -n $(git branch -v | grep "HEAD detached ") ]]
+  if [ -n "$(git branch -v | grep "HEAD detached ")" ]
   then
     OUTPUT+=$DETACHEDCOLOR$DETACHEDCHAR
     echo -e "$OUTPUT"
@@ -56,7 +56,7 @@ branchStatus () {
   REMOTE=""
   for remote in $REMOTES
   do
-    while [ "$FLAG" == "true" ]
+    while [ "$FLAG" = "true" ]
     do
       REMOTE=$remote
       FLAG=false
@@ -67,16 +67,16 @@ branchStatus () {
   MAINBRANCH="master"
   DEVELOP="develop"
   #Check if develop exists
-  if [[ -n $(git branch | grep -E "^[*]{0,1}[[:space:]]+${DEVELOP}$") ]]
+  if [ -n "$(git branch | grep -E "^[*]{0,1}[[:space:]]+${DEVELOP}$")" ]
   then
     MAINBRANCH=$DEVELOP
   #Check if master exists
-  elif [[ -z $(git branch | grep -E "^[*]{0,1}[[:space:]]+${MAINBRANCH}$") ]]
+  elif [ -z "$(git branch | grep -E "^[*]{0,1}[[:space:]]+${MAINBRANCH}$")" ]
   then
     MAINBRANCH=""
   fi
 
-  if [[ -z $MAINBRANCH ]]
+  if [ -z $MAINBRANCH ]
   then
     CURRENTUPSTREAM=$CURRENT
   else
@@ -109,16 +109,16 @@ branchStatus () {
   then
     STAGEDCHANGES=true
   fi
-  if [ "$STAGEDCHANGES" == "true" ]
+  if [ "$STAGEDCHANGES" = "true" ]
   then
-    if [ "$UNSTAGEDCHANGES" == "true" ]
+    if [ "$UNSTAGEDCHANGES" = "true" ]
     then
       OUTPUT+=$MIXEDSTAGEDUNSTAGEDCOLOR
     else
       OUTPUT+=$EVEYTHINGSTAGEDCOLOR
     fi
   else
-    if [ "$UNSTAGEDCHANGES" == "true" ]
+    if [ "$UNSTAGEDCHANGES" = "true" ]
     then
       OUTPUT+=$EVERYTHINGUNSTAGEDCOLOR
     fi
@@ -148,7 +148,7 @@ branchStatus () {
     fi
   fi
   #Check current != main
-  if  [[ -z $MAINBRANCH ]] || [ "$CURRENT" = $MAINBRANCH ]
+  if  [ -z $MAINBRANCH ] || [ "$CURRENT" = $MAINBRANCH ]
   then
     echo -e $OUTPUT
     return
@@ -158,7 +158,7 @@ branchStatus () {
   RPUPSTREAMMAIN=$(git rev-parse $UPSTREAMMAIN)
 
   #Check if main is up to date
-  if [[ -n $(git log --format='%H' | grep "${RPUPSTREAMMAIN}") ]]
+  if [ -n "$(git log --format='%H' | grep "${RPUPSTREAMMAIN}")" ]
   then
     OUTPUT+=$MAINCHAR
   else
