@@ -84,15 +84,12 @@ branchStatus () {
     CURRENTUPSTREAM=$CURRENT
   fi
 
-  UPSTREAMMAIN="$REMOTE/$MAINBRANCH"
+  MAINUPSTREAM="$REMOTE/$MAINBRANCH"
   #Check if main branch exists upstream
-  if ! [ "$(git branch -r | grep -E "^[[:space:]]+${UPSTREAMMAIN}$")" ]
+  if ! [ "$(git branch -r | grep -E "^[[:space:]]+${MAINUPSTREAM}$")" ]
   then
-    UPSTREAMMAIN=$MAINBRANCH
+    MAINUPSTREAM=$MAINBRANCH
   fi
-
-  RPCURRENT=$(git rev-parse "$CURRENT")
-  RPCURRENTUPSTREAM=$(git rev-parse "$CURRENTUPSTREAM")
 
   #Check if there are edited files
   STAGEDCHANGES=false
@@ -121,28 +118,25 @@ branchStatus () {
   fi
 
   #Check if current is up to date
-  if [ "$RPCURRENT" = "$RPCURRENTUPSTREAM" ]
-  then
-    OUTPUT=$OUTPUT$CURRENTCHAR
-  else
-    #Check if current is ahead
-    if git log --format='%H' "${CURRENTUPSTREAM}" | grep -q -E "^${RPCURRENT}$"
-    then
-      #NOT ahead
+  case $(git rev-list --left-right --count "$CURRENT"..."$CURRENTUPSTREAM") in
+    "0"*"0")
+      #Up to date
+      OUTPUT=$OUTPUT$CURRENTCHAR
+      ;;
+    "0"*)
+      #Behind
       OUTPUT=$OUTPUT$CURRENTBEHINDCHAR
-    else
+      ;;
+    *"0")
       #Ahead
-      #Check if current is behind
-      if git log --format='%H' | grep -q -E "^${RPCURRENTUPSTREAM}$"
-      then
-        #NOT behind
-        OUTPUT=$OUTPUT$CURRENTAHEADCHAR
-      else
-        #Behind
-        OUTPUT=$OUTPUT$PROBLEMCHAR
-      fi
-    fi
-  fi
+      OUTPUT=$OUTPUT$CURRENTAHEADCHAR
+      ;;
+    *)
+      #Diverge
+      OUTPUT=$OUTPUT$PROBLEMCHAR
+      ;;
+  esac
+
   #Check current != main
   if  [ -z $MAINBRANCH ] || [ "$CURRENT" = $MAINBRANCH ]
   then
@@ -151,10 +145,11 @@ branchStatus () {
   fi
 
   RPMAINBRANCH=$(git rev-parse $MAINBRANCH)
-  RPUPSTREAMMAIN=$(git rev-parse $UPSTREAMMAIN)
+  RPMAINUPSTREAM=$(git rev-parse $MAINUPSTREAM)
 
   #Check if main is up to date
-  if git log --format='%H' | grep -q "${RPUPSTREAMMAIN}"
+  # TODO: Check if it's the last commit to know if it's up to date or not
+  if git log --format='%H' | grep -q "${RPMAINUPSTREAM}"
   then
     OUTPUT=$OUTPUT$MAINCHAR
   else
