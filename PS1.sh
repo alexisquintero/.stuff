@@ -3,7 +3,6 @@
 branchStatus () {
   MAINCHAR="❙"
   MAINBEHINDCHAR="❰"
-  MAINAHEADCHAR="❱"
   CURRENTCHAR="❙"
   CURRENTBEHINDCHAR="❰"
   CURRENTAHEADCHAR="❱"
@@ -144,11 +143,9 @@ branchStatus () {
     return
   fi
 
-  RPMAINBRANCH=$(git rev-parse $MAINBRANCH)
   RPMAINUPSTREAM=$(git rev-parse $MAINUPSTREAM)
 
   #Check if main is up to date
-  # TODO: Check if it's the last commit to know if it's up to date or not
   if git log --format='%H' | grep -q "${RPMAINUPSTREAM}"
   then
     OUTPUT=$OUTPUT$MAINCHAR
