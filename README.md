@@ -1,0 +1,31 @@
+# utils
+
+## Contains ~~several~~ useful script~~s~~
+
+## PS1: _Simple_ prompt script to show git status made in POSIX sh
+
+### Pics
+
+_Soon._
+
+### Customization
+
+#### If working on a feature branch
+* `MAINCHAR`: Used for the main branch (master or develop or whatever) when it's up to date.
+* `MAINBEHINDCHAR`: Used for the main branch when it's behind upstream main.
+
+#### If working on a feature branch `CURRENT` means the feature branch, otherwise it's the symbol used for... current branch
+* `CURRENTCHAR`: Used for current branch when it's up to date.
+* `CURRENTBEHINDCHAR`: Used for current branch when it's behind upstream current.
+* `CURRENTAHEADCHAR`: Used for current branch when it's ahead upstream current.
+
+#### Miscellaneous
+* `DETACHEDCHAR`: Used when head is detached, i.e. checkout to a specific hash.
+* `PROBLEMCHAR`: Used when local and upstream diverged, e.g. when rebasing and changing commits hashes.
+* `REBASECHAR`: Used when there's a rebase in progress.
+* `BISECTCHAR`: Used when there's a bisection in progress.
+
+#### Colors are mostly self-explanatory.
+
+#### FAQs
+* Why is there no `MAINAHEADCHAR`? I don't know a _clever_ way to do that.
