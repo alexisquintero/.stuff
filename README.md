@@ -6,7 +6,7 @@
 
 ### Pics
 
-![alt ps1](https://gist.githubusercontent.com/alexisquintero/a246066a7fdc3f938f5b72fd6653ebe4/raw/5b09839358433b6a1950c2e70fec84f1e614e476/ps1.png)
+![ps1](https://gist.githubusercontent.com/alexisquintero/a246066a7fdc3f938f5b72fd6653ebe4/raw/5b09839358433b6a1950c2e70fec84f1e614e476/ps1.png)
 Current is up to date (❙) with no changes (same color as u) and master is behind (❰).
 
 ### Customization
