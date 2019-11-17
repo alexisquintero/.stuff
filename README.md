@@ -2,7 +2,8 @@
 
 ## Contains several useful script
 
-## PS1: _Simple_ prompt script to show git status made in POSIX sh
+# PS1
+## _Simple_ prompt script to show git status made in POSIX sh
 
 ### Pics
 
@@ -31,4 +32,5 @@ Current is up to date (❙) with no changes (same color as u) and master is behi
 #### FAQs
 * Why is there no `MAINAHEADCHAR`? I don't know a _clever_ way to do that.
 
-## custom.cfg: simple grub default selector based on time and/or day
+# custom.cfg
+## Simple grub default selector based on time and/or day
