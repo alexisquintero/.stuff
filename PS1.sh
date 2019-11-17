@@ -13,9 +13,9 @@ branchStatus () {
 
   DETACHEDCOLOR="\001\e[91m\002"
 
-  EVERYTHINGUNSTAGEDCOLOR="\001\e[91m\002"
-  MIXEDSTAGEDUNSTAGEDCOLOR="\001\e[93m\002"
-  EVEYTHINGSTAGEDCOLOR="\001\e[92m\002"
+  UNSTAGEDCOLOR="\001\e[91m\002"
+  STAGEDCOLOR="\001\e[92m\002"
+  UNTRACKEDCOLOR="\u001b[37m\002"
 
   OUTPUT=""
 
@@ -90,30 +90,18 @@ branchStatus () {
     MAINUPSTREAM=$MAINBRANCH
   fi
 
-  #Check if there are edited files
-  STAGEDCHANGES=false
-  UNSTAGEDCHANGES=false
-  if [ -n "$(git diff)" ]
+  # Check if there are untracked files
+  if [ -n "$(git ls-files "$(git rev-parse --show-toplevel)" -o)" ]
   then
-    UNSTAGEDCHANGES=true
-  fi
-  if [ -n "$(git diff --staged)" ]
+    OUTPUT=$OUTPUT$UNTRACKEDCOLOR
+  # Check if there are unstaged files
+  elif [ -n "$(git diff)" ]
   then
-    STAGEDCHANGES=true
-  fi
-  if [ "$STAGEDCHANGES" = "true" ]
+    OUTPUT=$OUTPUT$UNSTAGEDCOLOR
+  # Check if there are staged files
+  elif [ -n "$(git diff --staged)" ]
   then
-    if [ "$UNSTAGEDCHANGES" = "true" ]
-    then
-      OUTPUT=$OUTPUT$MIXEDSTAGEDUNSTAGEDCOLOR
-    else
-      OUTPUT=$OUTPUT$EVEYTHINGSTAGEDCOLOR
-    fi
-  else
-    if [ "$UNSTAGEDCHANGES" = "true" ]
-    then
-      OUTPUT=$OUTPUT$EVERYTHINGUNSTAGEDCOLOR
-    fi
+    OUTPUT=$OUTPUT$STAGEDCOLOR
   fi
 
   #Check if current is up to date
