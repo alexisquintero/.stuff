@@ -91,7 +91,7 @@ branchStatus () {
   fi
 
   # Check if there are untracked files
-  if [ -n "$(git ls-files "$(git rev-parse --show-toplevel)" -o)" ]
+  if [ "$(git status --porcelain 2>/dev/null| grep -c "^??")" != "0" ]
   then
     OUTPUT=$OUTPUT$UNTRACKEDCOLOR
   # Check if there are unstaged files
