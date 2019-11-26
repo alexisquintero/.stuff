@@ -34,3 +34,6 @@ Current is up to date (❙) with no changes (same color as u) and master is behi
 
 # custom.cfg
 ## Simple grub default selector based on time and/or day
+
+# SpotifyInfo.sh
+## Simple spotify integration with i3status
