@@ -1,9 +1,9 @@
 # utils
 
-## Contains several useful script
+Contains several useful scripts
 
 # PS1
-## _Simple_ prompt script to show git status made in POSIX sh
+Prompt script to show git status made in POSIX sh (slow on large projects)
 
 ### Pics
 
@@ -33,10 +33,11 @@ Current is up to date (❙) with no changes (same color as u) and master is behi
 * Why is there no `MAINAHEADCHAR`? I don't know a _clever_ way to do that.
 
 # custom.cfg
-## Simple grub default selector based on time and/or day
+Grub default selector based on time and/or day
 
 # i3statusScript.sh
-## Simple i3status scripts handler
+i3status scripts handler
+
 ### Use
 * Make sure this script is in $PATH.
 * Change how the i3status is called so it looks like this `status_command i3statusScript.sh` in your i3 config file.
@@ -45,4 +46,4 @@ Current is up to date (❙) with no changes (same color as u) and master is behi
 * `I3STATUS_CONF`: path to the i3status config file.
 
 # SpotifyInfo.sh
-## Simple spotify POSIX sh script to get the current song name and artist, useful for integration with i3status
+Spotify POSIX sh script to get the current song name and artist, useful for integration with i3status
