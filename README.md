@@ -47,3 +47,6 @@ i3status scripts handler
 
 # SpotifyInfo.sh
 Spotify POSIX sh script to get the current song name and artist, useful for integration with i3status
+
+# i3nextEmptyWs.py
+Go to next empty workspace
