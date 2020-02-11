@@ -6,7 +6,7 @@ then
   NAME=$(echo "$SPOTIFY_METADATA" | grep -A 1 "xesam:title" | grep "variant.*" | grep -oP '.*"\K[^"]+')
   ARTIST=$(echo "$SPOTIFY_METADATA" | grep -A 2 "xesam:artist" | grep -v "xesam:artist" | grep -oP '.*"\K[^"]+')
 
-  echo " $NAME - $ARTIST | "
+  echo "♫ $NAME - $ARTIST | "
 else
   echo ""
 fi
