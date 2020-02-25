@@ -2,9 +2,14 @@
 
 if [ "$(pidof spotify)" ]
 then
-  SPOTIFY_METADATA=$(dbus-send --print-reply --session --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Get string:'org.mpris.MediaPlayer2.Player' string:'Metadata')
-  NAME=$(echo "$SPOTIFY_METADATA" | grep -A 1 "xesam:title" | grep "variant.*" | grep -oP '.*"\K[^"]+')
-  ARTIST=$(echo "$SPOTIFY_METADATA" | grep -A 2 "xesam:artist" | grep -v "xesam:artist" | grep -oP '.*"\K[^"]+')
+  SPOTIFY_METADATA=$(gdbus call \
+    --session \
+    --dest org.mpris.MediaPlayer2.spotify \
+    --object-path /org/mpris/MediaPlayer2 \
+    --method org.freedesktop.DBus.Properties.Get org.mpris.MediaPlayer2.Player "Metadata")
+
+  NAME=$(echo "$SPOTIFY_METADATA" | grep -oP "(?<='xesam:title': <['\"]).*(?=['\"]>,)")
+  ARTIST=$(echo "$SPOTIFY_METADATA" | grep -oP "(?<='xesam:artist': <\[['\"]).*(?=['\"]\]>,)" | sed s/[][\'\"]//g)
 
   echo "♫ $NAME - $ARTIST | "
 else
