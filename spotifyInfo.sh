@@ -9,7 +9,7 @@ then
     --method org.freedesktop.DBus.Properties.Get org.mpris.MediaPlayer2.Player "Metadata")
 
   NAME=$(echo "$SPOTIFY_METADATA" | grep -oP "(?<='xesam:title': <['\"]).*(?=['\"]>,)")
-  ARTIST=$(echo "$SPOTIFY_METADATA" | grep -oP "(?<='xesam:artist': <\[['\"]).*(?=['\"]\]>,)" | sed s/[][\'\"]//g)
+  ARTIST=$(echo "$SPOTIFY_METADATA" | grep -oP "(?<='xesam:artist': <\[['\"]).*(?=['\"]\]>,)" | tr -d "]['\"")
 
   echo "♫ $NAME - $ARTIST | "
 else
