@@ -50,3 +50,7 @@ Spotify POSIX sh script to get the current song name and artist, useful for inte
 
 # i3nextEmptyWs.py
 Go to next empty workspace
+
+# netSpeed.sh 
+Mostly taken from the [i3Status repo](https://github.com/i3/i3status/blob/master/contrib/net-speed.sh).
+Display network upload and download.
