@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Based on https://github.com/i3/i3status/blob/master/contrib/net-speed.sh
 
@@ -28,17 +28,18 @@ readable() {
 }
 
 update_rate() {
-  local time=$(date +%s)
+  local time
+  time=$(date +%s)
   local rx=0 tx=0 tmp_rx tmp_tx
 
   for iface in $ifaces; do
-    read tmp_rx < "/sys/class/net/${iface}/statistics/rx_bytes"
-    read tmp_tx < "/sys/class/net/${iface}/statistics/tx_bytes"
+    read -r tmp_rx < "/sys/class/net/${iface}/statistics/rx_bytes"
+    read -r tmp_tx < "/sys/class/net/${iface}/statistics/tx_bytes"
     rx=$(( rx + tmp_rx ))
     tx=$(( tx + tmp_tx ))
   done
 
-  local interval=$(( $time - $last_time ))
+  local interval=$(( time - last_time ))
   if [ $interval -gt 0 ]; then
     rate="$(readable $(( (rx - last_rx) / interval )))↓ $(readable $(( (tx - last_tx) / interval )))↑"
   else
@@ -53,4 +54,4 @@ update_rate() {
 update_rate
 sleep 1
 update_rate
-echo "${rate} |"
+echo "${rate} | "
