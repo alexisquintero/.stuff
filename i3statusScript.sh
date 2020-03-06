@@ -7,7 +7,7 @@ SCRIPTS_PATHS="$HOME/.config/utils/spotifyInfo.sh
 # Path to your i3status config file
 I3STATUS_CONF="$HOME/.config/i3/i3status"
 
-i3status --config "$I3STATUS_CONF" | while :
+stdbuf -o 0 -e 0 i3status --config "$I3STATUS_CONF" | while :
 do
   read -r line
   SCRIPTS_OUTPUT=""
