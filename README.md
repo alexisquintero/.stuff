@@ -54,3 +54,4 @@ Go to next empty workspace
 # netSpeed.sh 
 Mostly taken from the [i3Status repo](https://github.com/i3/i3status/blob/master/contrib/net-speed.sh).
 Display network upload and download.
+Causes delay to the clock and to the statusbar update.
